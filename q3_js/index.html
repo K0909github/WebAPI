@@ -40,10 +40,14 @@
   </style>
 </head>
 <body>
+  <!-- 画面全体を中央に寄せたシンプルな1画面アプリ -->
   <div class="box">
+    <!-- 現在の閾値を大きく見せる -->
     <div class="big">閾値: <span id="th">50</span></div>
+    <!-- 閾値以上のスコア件数を表示する -->
     <p class="sub">score ≥ 閾値 の件数: <b id="cnt">0</b></p>
 
+    <!-- 閾値を上下させたり初期値に戻したりするボタン群 -->
     <div class="row">
       <button id="dec">閾値 -1</button>
       <button id="reset">リセット</button>
@@ -52,40 +56,50 @@
   </div>
 
   <script>
-    // 模擬データ（例：モデルのスコアや評価値）
+    // 比較対象になるスコアの一覧を用意する
     const scores = [12, 40, 51, 49, 80, 95, 50, 50, 10, 72, 33];
+    // リセット時に戻す初期閾値
     const initialThreshold = 50;
 
+    // 現在の閾値を保持する変数
     let threshold = initialThreshold;
 
+    // 表示を書き換える DOM 要素を取っておく
     const thEl = document.getElementById("th");
     const cntEl = document.getElementById("cnt");
 
+    // 閾値が範囲外に行かないように 0〜100 に収める
     function clip(value, lo, hi) {
       return Math.max(lo, Math.min(hi, value));
     }
 
+    // 閾値と件数の表示を最新状態に更新する
     function render() {
       thEl.textContent = String(threshold);
+      // scores の中から threshold 以上だけ数える
       const count = scores.filter((s) => s >= threshold).length;
       cntEl.textContent = String(count);
     }
 
+    // +1 ボタンで閾値を増やし、画面を更新する
     document.getElementById("inc").addEventListener("click", () => {
       threshold = clip(threshold + 1, 0, 100);
       render();
     });
 
+    // -1 ボタンで閾値を減らし、画面を更新する
     document.getElementById("dec").addEventListener("click", () => {
       threshold = clip(threshold - 1, 0, 100);
       render();
     });
 
+    // リセットボタンで初期値に戻し、画面を更新する
     document.getElementById("reset").addEventListener("click", () => {
       threshold = initialThreshold;
       render();
     });
 
+    // 初期表示を1回描画する
     render();
   </script>
 </body>
