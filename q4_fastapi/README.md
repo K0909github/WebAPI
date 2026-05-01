@@ -1,30 +1,33 @@
 # Q4 FastAPI 実行手順（模範）
 
-## セットアップ
+## Docker でのセットアップ
 
 ```bash
 cd q4_fastapi
-pip install -r requirements.txt
+docker build -t q4-fastapi .
 ```
 
-## 起動
+## Docker での起動
 
 ```bash
-uvicorn app:app --reload
+docker run --rm -p 8000:8000 -v ${PWD}:/app q4-fastapi
 ```
 
 - Swagger UI: http://127.0.0.1:8000/docs
 
-## 動作確認（curl例）
+## 動作確認（curl例 / PowerShell）
+
+PowerShell の `curl` は `Invoke-WebRequest` なので、`curl.exe` を使う。
+`--%` を付けると PowerShell の解釈を止められて JSON が壊れない。
 
 ```bash
-curl -X POST http://127.0.0.1:8000/predict -H "Content-Type: application/json" -d "{\"x1\":1.2,\"x2\":-0.7}"
+curl.exe --% -X POST http://127.0.0.1:8000/predict -H "Content-Type: application/json" -d "{\"x1\":1.2,\"x2\":-0.7}"
 
-curl "http://127.0.0.1:8000/predictions?limit=5"
+curl.exe "http://127.0.0.1:8000/predictions?limit=5"
 
-curl http://127.0.0.1:8000/predictions/1
+curl.exe http://127.0.0.1:8000/predictions/1
 
-curl -X DELETE http://127.0.0.1:8000/predictions/1
+curl.exe -X DELETE http://127.0.0.1:8000/predictions/1
 ```
 
 ## 期待ポイント
